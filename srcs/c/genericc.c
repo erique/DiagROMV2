@@ -693,6 +693,7 @@ uint8_t getCharSerial(void)
     if (c == 0 || c == 0x1b) {
         c = 0;
         globals->SerAnsiChecks++;
+        waitShort();  // Normalize timeout across CPU speeds (~640µs per check)
         if (globals->SerAnsiChecks >= 0x0f) {
             togglePwrLED();
             globals->SerAnsiChecks = 0;
