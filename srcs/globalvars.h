@@ -319,6 +319,8 @@ typedef struct GlobalVars
 	uint8_t	CheckMemEditOldXpos;
 	uint8_t	CheckMemEditOldYpos;
 	uint8_t	CheckMemEditCharPos;
+	uint8_t	CheckMemEditOldByte;		// Cached byte value at cursor for change detection
+	uint8_t	CheckMemEditDirty;		// Force-redraw flag
 	uint8_t	CPUCache;
 	uint8_t	oldbfe001;			// Contains old value of bfe001
 	uint8_t	oldbfd100;

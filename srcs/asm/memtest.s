@@ -491,12 +491,7 @@ CheckMemEdit:
 	add.l	d2,d0
 	add.l	d3,d1
 	bsr	SetPos				; First byte
-	move.b	CheckMemEditXpos(a6),d0
-	move.b	CheckMemEditYpos(a6),d1
-	bsr	.getcursoradr
-	clr.l	d0
-	move.b	(a0),d0
-	move.l	d0,d7				; Store d0 to d7 temporary
+	move.l	d7,d0
 	bsr	binhexbyte
 	move.l	#11,d1
 	bsr	Print				; Print what is in current memorypos as a HEX digit and yellow.
@@ -505,21 +500,20 @@ CheckMemEdit:
 	add.b	CheckMemEditXpos(a6),d0
 	add.b	CheckMemEditYpos(a6),d1
 	bsr	SetPos
-	move.b	CheckMemEditXpos(a6),d0
-	move.b	CheckMemEditYpos(a6),d1
-	bsr	.getcursoradr
-	clr.l	d0
-	move.b	(a0),d0
+	move.l	d7,d0
 	bsr	MakePrintable
 	move.l	#11,d1
 	bsr	PrintChar
 	move.l	#17,d0
 	move.l	#25,d1
 	bsr	SetPos
+	move.b	CheckMemEditXpos(a6),d0
+	move.b	CheckMemEditYpos(a6),d1
+	bsr	.getcursoradr
 	move.l	a0,d0
 	bsr	binhex
 	move.l	#3,d1
-	bsr	Print	
+	bsr	Print
 	move.l	#52,d0
 	move.l	#25,d1
 	bsr	SetPos
@@ -527,8 +521,10 @@ CheckMemEdit:
 	bsr	binstringbyte
 	move.l	#3,d1
 	bsr	Print
+.skipdraw:
 	rts
 .notequal:					; We had movement.  lets put stuff to "normal" case
+	move.b	#1,CheckMemEditDirty(a6)
 	clr.b	CheckMemEditCharPos(a6)	; Clear charpos
 	move.b	d2,CheckMemEditOldXpos(a6)
 	move.b	d3,CheckMemEditOldYpos(a6)	; Set current pos to "old" pos
@@ -716,6 +712,7 @@ CheckMemEdit:
 CheckMemEditUpdateScreen:			; Updates the whole screen with memorydump
 						; INDATA:
 						;	A0 = Startaddress
+	move.b	#1,CheckMemEditDirty(a6)
 	move.l	#1,d0
 	move.l	#20,d7
 .loop:
