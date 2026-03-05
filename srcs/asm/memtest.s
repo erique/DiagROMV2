@@ -616,7 +616,7 @@ CheckMemEdit:
 	move.l	#52,d0
 	move.l	#25,d1
 	bsr	SetPos
-	lea	UnmappedByteTxt,a0		; Show "xx" for binary too
+	lea	UnmappedBinTxt,a0		; Show "xxxxxxxx" for binary
 	move.l	#1,d1				; RED
 	bsr	Print
 	rts
